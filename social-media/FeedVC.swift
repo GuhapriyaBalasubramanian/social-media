@@ -142,7 +142,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
         let keychainResult = KeychainWrapper.defaultKeychainWrapper.remove(key: KEY_UID)
         print("GUHA: ID removed from keychain \(keychainResult)")
         try! FIRAuth.auth()?.signOut()
-        performSegue(withIdentifier: "goToSignIn", sender: nil)
+        dismiss(animated: true, completion: nil)
+        //performSegue(withIdentifier: "goToSignIn", sender: nil)
     }
     
     

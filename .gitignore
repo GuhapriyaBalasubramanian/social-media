@@ -1,5 +1,6 @@
 # Google plist files #
-*.plist
+GoogleService-Info.plist
+Info.plist
 
 # Compiled source #
 ###################
