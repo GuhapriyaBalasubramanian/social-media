@@ -24,6 +24,7 @@
 		98EA5FCC1DDD890800642A41 /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EA5FCB1DDD890800642A41 /* PostCell.swift */; };
 		98EA5FCF1DDD8A9800642A41 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98EA5FCD1DDD8A9800642A41 /* Main.storyboard */; };
 		98EA5FD11DDD8C6500642A41 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 98EA5FD01DDD8C6500642A41 /* GoogleService-Info.plist */; };
+		98EA5FD41DDF584700642A41 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EA5FD31DDF584700642A41 /* Users.swift */; };
 		C3B2325F1EFEB96F03484335 /* Pods_social_media.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09C0FFAC84BD77B4A74DD362 /* Pods_social_media.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		98EA5FCE1DDD8A9800642A41 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		98EA5FD01DDD8C6500642A41 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		98EA5FD21DDE6BBE00642A41 /* social-media.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "social-media.entitlements"; sourceTree = "<group>"; };
+		98EA5FD31DDF584700642A41 /* Users.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		F3916620AB9096325C41A7E2 /* Pods-social-media.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-social-media.release.xcconfig"; path = "Pods/Target Support Files/Pods-social-media/Pods-social-media.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -124,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				98EA5FBF1DDD884C00642A41 /* Post.swift */,
+				98EA5FD31DDF584700642A41 /* Users.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 				98EA5FCA1DDD88F000642A41 /* CircleView.swift in Sources */,
 				98EA5FA31DDD7AD600642A41 /* AppDelegate.swift in Sources */,
 				98EA5FC41DDD889E00642A41 /* RoundBtn.swift in Sources */,
+				98EA5FD41DDF584700642A41 /* Users.swift in Sources */,
 				98EA5FC21DDD888400642A41 /* FancyView.swift in Sources */,
 				98EA5FBC1DDD879000642A41 /* Constants.swift in Sources */,
 				98EA5FCC1DDD890800642A41 /* PostCell.swift in Sources */,

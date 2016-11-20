@@ -12,13 +12,18 @@ import FBSDKLoginKit
 import Firebase
 import SwiftKeychainWrapper
 
+
 class SignInVC: UIViewController {
     
     @IBOutlet weak var emailField: FancyField!
     @IBOutlet weak var pwdField: FancyField!
+    var userName = ""
+    var users = [Users]()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.users = []
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -28,11 +33,14 @@ class SignInVC: UIViewController {
         }
     }
     
+    
     @IBAction func facebookBtnTapped(_ sender: AnyObject) {
-        
+               
         let facebookLogin = FBSDKLoginManager()
         
-        facebookLogin.logIn(withReadPermissions: ["email"], from: self) { (result, error) in
+        facebookLogin.logIn(withReadPermissions: ["email","public_profile"], from: self) { (result, error) in
+            
+            
             if error != nil {
                 print("GUHA: Unable to authenticate with Facebook - \(error)")
             } else if result?.isCancelled == true {
@@ -41,7 +49,29 @@ class SignInVC: UIViewController {
                 print("GUHA: Successfully authenticated with Facebook")
                 let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
                 self.firebaseAuth(credential)
+                
             }
+            
+            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "email, name,picture{url}"]).start(completionHandler: { (connection, result, error) -> Void in
+                    
+                if (error == nil){
+                    guard let resultDictionary = result as? [String : AnyObject] else { return }
+                    guard let id = resultDictionary["id"] as? String else { return }
+                    print("GUHA: fb id \(id)")
+                    guard let user = resultDictionary["name"] as? String else { return }
+                    self.userName = user
+                    print("GUHA: user name \(self.userName)")
+                    
+                    guard let pic = resultDictionary["picture"] as? [String : AnyObject] else {return}
+                    guard let data = pic["data"] as? [String : AnyObject] else { return}
+                    guard let url = data["url"] as? String else {return}
+                    print("GUHA: url \(url)")
+                    
+                                        
+                    //self.getFacebookProfileImage(userID: id)
+                }
+            })
+            
         }
         
     }
@@ -53,7 +83,12 @@ class SignInVC: UIViewController {
             } else {
                 print("GUHA: Successfully authenticated with Firebase")
                 if let user = user {
-                    let userData = ["provider": credential.provider]
+                    //self.userName = user.email!
+                    let userData: Dictionary<String, String> = [
+                        "provider": user.providerID as String,
+                        "userName": self.userName as String
+                        
+                    ]
                     self.completeSignIn(id: user.uid, userData: userData)
                 }
             }
@@ -65,7 +100,12 @@ class SignInVC: UIViewController {
                 if error == nil {
                     print("GUHA: Email user authenticated with Firebase")
                     if let user = user {
-                        let userData = ["provider": user.providerID]
+                        self.userName = user.email!
+                        let userData: Dictionary<String, String> = [
+                            "provider": user.providerID as String,
+                            "userName": self.userName as String
+                            
+                        ]
                         self.completeSignIn(id: user.uid, userData: userData)
                     }
                 } else {
@@ -75,8 +115,13 @@ class SignInVC: UIViewController {
                         } else {
                             print("GUHA: Successfully authenticated with Firebase")
                             if let user = user {
-                                let userData = ["provider": user.providerID]
-                                self.completeSignIn(id: user.uid, userData: userData)
+                                self.userName = user.email!
+                                let userData: Dictionary<String, String> = [
+                                    "provider": user.providerID as String,
+                                    "userName": self.userName as String
+                                    
+                                ]
+                                 self.completeSignIn(id: user.uid, userData: userData)
                             }
                         }
                     })
@@ -85,11 +130,20 @@ class SignInVC: UIViewController {
         }
     }
     
-    func completeSignIn(id: String, userData: Dictionary<String, String>) {
+    func completeSignIn(id: String, userData: Dictionary<String,String>) {
+        
         DataService.ds.createFirbaseDBUser(uid: id, userData: userData)
+        
+        let provName = userData["provider"]
+        
+        //Store the values
+        let userObj = Users(userName:userName,provider:provName!,userKey:id)
+        
+        
         //let keychainResult = KeychainWrapper.setString(id, forKey: KEY_UID)
         let keychainResult = KeychainWrapper.defaultKeychainWrapper.set(id, forKey: KEY_UID)
         print("GUHA: Data saved to keychain \(keychainResult)")
+        
         performSegue(withIdentifier: "goToFeed", sender: nil)
     }
     

@@ -20,6 +20,8 @@ class PostCell: UITableViewCell {
     
     var post: Post!
     var likesRef: FIRDatabaseReference!
+    var firBaseRef: FIRDatabaseReference!
+    var firData: FIRDataSnapshot!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -63,6 +65,22 @@ class PostCell: UITableViewCell {
                 self.likeImg.image = UIImage(named: "filled-heart")
             }
         })
+        
+        //populate the user name label
+        firBaseRef = DataService.ds.REF_USER_CURRENT
+        firBaseRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            //print("GUHA: \(snapshot)")
+            if let userInfo = snapshot.childSnapshot(forPath: "userName") as? FIRDataSnapshot{
+                //print("GUHA: \(userInfo)")
+            
+            if let currentUser = userInfo.value as? NSString {
+                 print("GUHA: currentUser - \(currentUser)")
+                self.usernameLbl.text = currentUser as String
+            }
+            }
+            
+        })
+       
     }
     
     func likeTapped(sender: UITapGestureRecognizer) {
