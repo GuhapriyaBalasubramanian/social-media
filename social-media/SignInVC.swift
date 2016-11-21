@@ -85,7 +85,7 @@ class SignInVC: UIViewController {
                 if let user = user {
                     //self.userName = user.email!
                     let userData: Dictionary<String, String> = [
-                        "provider": user.providerID as String,
+                        "provider": credential.provider as String,
                         "userName": self.userName as String
                         
                     ]
@@ -138,6 +138,7 @@ class SignInVC: UIViewController {
         
         //Store the values
         let userObj = Users(userName:userName,provider:provName!,userKey:id)
+        users.append(userObj)
         
         
         //let keychainResult = KeychainWrapper.setString(id, forKey: KEY_UID)

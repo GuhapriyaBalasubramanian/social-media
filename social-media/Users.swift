@@ -10,16 +10,11 @@ import Foundation
 import Firebase
 
 class Users {
-    private var _caption: String!
-    private var _imageUrl: String!
-    private var _likes: Int!
-    private var _postKey: String!
-    private var _postRef: FIRDatabaseReference!
     
     private var _userName: String!
     private var _provider: String!
     private var _userKey: String!
-    private var _usersRef: FIRDatabaseReference!
+    private var _userRef: FIRDatabaseReference!
     
     
     var userName: String {
@@ -41,22 +36,18 @@ class Users {
         self._userKey = userKey
     }
     
-    init(postKey: String, postData: Dictionary<String, AnyObject>) {
-        self._postKey = postKey
-        
-        if let caption = postData["caption"] as? String {
-            self._caption = caption
+    init(userKey: String, userData: Dictionary<String, AnyObject>) {
+        self._userKey = userKey
+
+        if let userName = userData["userName"] as? String {
+            self._userName = userName
         }
         
-        if let imageUrl = postData["imageUrl"] as? String {
-            self._imageUrl = imageUrl
+        if let provider = userData["provider"] as? String {
+            self._provider = provider
         }
         
-        if let likes = postData["likes"] as? Int {
-            self._likes = likes
-        }
-        
-        _postRef = DataService.ds.REF_USERS.child(_userKey)
+        _userRef = DataService.ds.REF_USERS.child(_userKey)
         
     }
     

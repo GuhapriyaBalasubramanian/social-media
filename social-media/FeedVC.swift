@@ -121,10 +121,15 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
     }
     
     func postToFirebase(imgUrl: String) {
+        
+        //get the user id from the keychain wrapper
+        let userId = KeychainWrapper.defaultKeychainWrapper.string(forKey: KEY_UID)
+        //let userId = "abcdef"
         let post: Dictionary<String, AnyObject> = [
             "caption": captionField.text! as AnyObject,
             "imageUrl": imgUrl as AnyObject,
-            "likes": 0 as AnyObject
+            "likes": 0 as AnyObject,
+            "userKey": userId! as String as AnyObject
         ]
         
         let firebasePost = DataService.ds.REF_POSTS.childByAutoId()

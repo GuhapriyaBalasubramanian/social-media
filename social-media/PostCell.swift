@@ -21,7 +21,9 @@ class PostCell: UITableViewCell {
     var post: Post!
     var likesRef: FIRDatabaseReference!
     var firBaseRef: FIRDatabaseReference!
+    var firBaseRef1: FIRDatabaseReference!
     var firData: FIRDataSnapshot!
+    var postUserKey = ""
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -66,20 +68,37 @@ class PostCell: UITableViewCell {
             }
         })
         
+       
+        
         //populate the user name label
-        firBaseRef = DataService.ds.REF_USER_CURRENT
+        firBaseRef = DataService.ds.REF_POSTS.child(post.postKey)
         firBaseRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            //print("GUHA: \(snapshot)")
-            if let userInfo = snapshot.childSnapshot(forPath: "userName") as? FIRDataSnapshot{
-                //print("GUHA: \(userInfo)")
             
-            if let currentUser = userInfo.value as? NSString {
-                 print("GUHA: currentUser - \(currentUser)")
-                self.usernameLbl.text = currentUser as String
-            }
+            if let userKey = snapshot.childSnapshot(forPath: "userKey") as? FIRDataSnapshot{
+               
+                if let currentUserKey = userKey.value as? NSString {
+                //print("GUHA: currentUserKey - \(currentUserKey)")
+                    self.postUserKey = currentUserKey as String
+                }
+                
+                //Now get the useerName corresponding to the user in the post->userKey
+                self.firBaseRef1 = DataService.ds.REF_USERS.child(self.postUserKey)
+                self.firBaseRef1.observeSingleEvent(of: .value, with: { (snapshot) in
+                    
+                    if let userInfo = snapshot.childSnapshot(forPath: "userName") as? FIRDataSnapshot{
+                        
+                        if let currentUser = userInfo.value as? NSString {
+                            //print("GUHA: currentUser - \(currentUser)")
+                            self.usernameLbl.text = currentUser as String
+                        }
+                    }
+                    
+                })
             }
             
         })
+        
+        
        
     }
     
